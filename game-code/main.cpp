@@ -3,8 +3,8 @@
 
 using namespace std;
 
-string cards[5] = {"a", "b", "c", "d", "e"};
-string possible_hands[4][5] = {{"", "b", "", "d", "e"},
+const string cards[5] = {"a", "b", "c", "d", "e"};
+const string possible_hands[4][5] = {{"", "b", "", "d", "e"},
                             {"a", "", "c", "", "e"},
                             {"a", "", "c", "d", ""},
                             {"a", "b", "", "d", ""}};
@@ -37,9 +37,9 @@ void generate_boss(string (&boss_hand)[3]) {
  * @return
  */
 bool attack_boss(const string& card_played, string (&boss_hand)[3]) {
-    for (int i=0; i < 3; i++) { // 3 for len boss_hand
-        if (boss_hand[i] == card_played) {
-            boss_hand[i] = "";
+    for (auto & i : boss_hand) {
+        if (i == card_played) {
+            i = "";
             return true;
         }
     }
@@ -53,7 +53,7 @@ bool attack_boss(const string& card_played, string (&boss_hand)[3]) {
  */
 bool boss_alive(string boss_hand[3]) {
     for (int i=0; i < 3; i++) { // 3 for len boss_hand
-        if (boss_hand[i] != "") {
+        if (!boss_hand[i].empty()) {
             return true;
         }
     }
@@ -66,7 +66,7 @@ bool boss_alive(string boss_hand[3]) {
  */
 void print_boss_hand(string boss_hand[3]) {
     for (int i=0; i < 3; i++) {
-        if (boss_hand[i] == "") {
+        if (boss_hand[i].empty()) {
             cout << "-";
         } else {
             cout << boss_hand[i];
@@ -89,7 +89,7 @@ void print_boss_hand(string boss_hand[3]) {
 
  void print_player_hand(string player_hand[5]) {
      for (int i=0; i < 5; i++) { // 5 for len player_hand
-         if (player_hand[i] == "") {
+         if (player_hand[i].empty()) {
              cout << "-";
          } else {
              cout << player_hand[i];
@@ -116,6 +116,10 @@ int main() {
     print_player_hand(player_hand);
 
     // TODO: play_card function--get a specific card from the hand (cin, will be button; use index [#]) and return the card
+
+    // TODO: get code working where print boss, print hand, ask for card, print updated boss until boss dies.
+    // TODO: then generate new boss
+    // TODO: count number of hands played (set a limit and use this as the limiting factor in addition to time--time is manual with a sep. stopwatch)
 
     return 0;
 }

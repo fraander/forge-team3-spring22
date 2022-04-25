@@ -98,28 +98,98 @@ void print_boss_hand(string boss_hand[3]) {
      cout << endl;
  }
 
+/**
+* Remove card from hand and return it from the function
+* @param card_index
+* @param player_hand
+* @return
+*/
+string play_card(int card_index, string (&player_hand)[5]) {
+    string c = player_hand[card_index];
+    player_hand[card_index] = "";
+    return c;
+}
+
+/**
+ * Get card to play from user and return it using play_card
+ * @param player_hand
+ * @return
+ */
+ string get_card(string (&player_hand)[5]) {
+     print_player_hand(player_hand);
+
+    int index;
+    cin >> index;
+
+     while (player_hand[index] == "") {
+         cout << "Invalid input" << endl;
+         cin >> index;
+     }
+
+     string r = play_card(index, player_hand);
+     generate_player(player_hand);
+     return r;
+ }
+
+ void example() {
+     string boss_hand[3]; // create boss hand example
+     generate_boss(boss_hand);
+     print_boss_hand(boss_hand);
+
+     attack_boss("a", boss_hand); // attack boss example
+     attack_boss("a", boss_hand);
+     attack_boss("a", boss_hand);
+     print_boss_hand(boss_hand);
+     cout << boss_alive(boss_hand) << endl;
+
+     string player_hand[5]; // create player hand example
+     generate_player(player_hand);
+     print_player_hand(player_hand);
+
+     cout << get_card(player_hand); // get card from user hand based on input
+ }
+
+ int play_game() {
+     int bosses_defeated = 0;
+     int boss_goal = 3;
+     int hands_played = 0;
+     int max_hands = 24;
+
+     string boss_hand[3]; // create boss hand example
+
+
+     string player_hand[5]; // create player hand example
+     generate_player(player_hand);
+
+     while (bosses_defeated < boss_goal) {
+         cout << endl << "New boss !" << endl;
+         generate_boss(boss_hand);
+         print_boss_hand(boss_hand);
+
+         while (boss_alive(boss_hand)) {
+             if (hands_played >= max_hands) {
+                 cout << "You've run out of cards." << endl;
+                 return 0;
+             } else {
+                 attack_boss(get_card(player_hand), boss_hand);
+                 print_boss_hand(boss_hand);
+                 hands_played += 1;
+             }
+         }
+         cout << "Boss defeated! You have " << max_hands - hands_played << " moves left." << endl;
+         bosses_defeated +=1;
+     }
+
+     cout << "You've defeated all the bosses!" << endl;
+     return 0;
+ }
+
 int main() {
     srand(time(0));
 
-    string boss_hand[3]; // create boss hand example
-    generate_boss(boss_hand);
-    print_boss_hand(boss_hand);
+//    example(); // test functions
 
-    attack_boss("a", boss_hand); // attack boss example
-    attack_boss("a", boss_hand);
-    attack_boss("a", boss_hand);
-    print_boss_hand(boss_hand);
-    cout << boss_alive(boss_hand) << endl;
-
-    string player_hand[5]; // create player hand example
-    generate_player(player_hand);
-    print_player_hand(player_hand);
-
-    // TODO: play_card function--get a specific card from the hand (cin, will be button; use index [#]) and return the card
-
-    // TODO: get code working where print boss, print hand, ask for card, print updated boss until boss dies.
-    // TODO: then generate new boss
-    // TODO: count number of hands played (set a limit and use this as the limiting factor in addition to time--time is manual with a sep. stopwatch)
+    play_game();
 
     return 0;
 }

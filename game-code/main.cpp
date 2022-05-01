@@ -100,6 +100,7 @@ int main() {
 
             if (deck_size - cards_played == 0) {
                 cout << "You're out of moves. The dungeon has defeated you." << endl;
+                return 0;
             }
 
             cout << "BOSS: ";

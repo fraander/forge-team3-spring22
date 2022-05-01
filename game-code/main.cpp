@@ -3,8 +3,6 @@
 
 using namespace std;
 
-const string cards[5] = {"a", "b", "c", "d", "e"};
-
 /**
  * Generate a random integer between 0 and max
  * @param max_exclusive
@@ -12,6 +10,27 @@ const string cards[5] = {"a", "b", "c", "d", "e"};
  */
 int rand_int(int max_exclusive) {
     return rand() % max_exclusive;
+}
+
+void generate_boss(int (&boss_hand)[5]) {
+    for (int i = 0; i < 4; i++) {
+        int new_c = rand_int(5);
+        boss_hand[new_c] += 1;
+    }
+}
+
+void attack_boss(int (&boss_hand)[5], int attack_index) {
+    if (boss_hand[attack_index] > 0) {
+        boss_hand[attack_index] -= 1;
+    }
+}
+
+bool boss_alive(int boss_hand[5]) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+        sum += boss_hand[i];
+    }
+    return sum > 0;
 }
 
 void draw_card(int (&player_hand)[5], int most_recent) {
@@ -25,14 +44,15 @@ void draw_card(int (&player_hand)[5], int most_recent) {
     }
 }
 
-void print_hand(int player_hand[5]) {
+void print_hand(int hand[5]) {
     for (int i = 0; i < 5; i++) {
-        cout << player_hand[i] << " ";
+        cout << hand[i] << " ";
     }
     cout << endl;
 }
 
-string remove_card(int (&player_hand)[5]) {
+int remove_card(int (&player_hand)[5]) {
+    cout << "YOU:  ";
     print_hand(player_hand);
 
     int index = -1;
@@ -47,21 +67,43 @@ string remove_card(int (&player_hand)[5]) {
 
     player_hand[index] -= 1;
     draw_card(player_hand, index);
-    return cards[index];
+    return index;
 
 }
 
 int main() {
     srand(time(0));
 
-    int player_hand[5] = {0, 0, 0, 0, 0}; // Player setup
+    int num_bosses = 5;
+    int deck_size = 40;
+    int cards_played = 0;
 
+    int player_hand[5] = {0, 0, 0, 0, 0}; // player setup
     draw_card(player_hand, -1); // draw 3 cards to start
     draw_card(player_hand, -1);
     draw_card(player_hand, -1);
 
-    while (true) { // let player keep playing cards
-        remove_card(player_hand);
+    cout << "TIME TO TAKE ON THE DUNGEON!" << endl;
+
+    for (int bosses_defeated = 0; bosses_defeated < num_bosses; bosses_defeated++) {
+        int boss_hand[5] = {0, 0, 0, 0, 0}; // boss setup
+        generate_boss(boss_hand); // draw cards for boss
+
+        while (boss_alive(boss_hand)) {
+            cout << "CARDS: " << cards_played << "/" << deck_size << endl;
+            cout << "BOSSES: " << bosses_defeated << "/" << num_bosses << endl;
+
+            if (deck_size - cards_played == 0) {
+                cout << "You're out of cards. You lose." << endl;
+            }
+
+            cout << "BOSS: ";
+            print_hand(boss_hand);
+
+            attack_boss(boss_hand, remove_card(player_hand));
+
+            cards_played += 1;
+        }
     }
 
     return 0;

@@ -84,6 +84,11 @@ int main() {
     draw_card(player_hand, -1);
 
     cout << "TIME TO TAKE ON THE DUNGEON!" << endl;
+    cout << "- Type the index of the card in your hand to play it [0, 1, 2, 3, 4]." << endl;
+    cout << "- Match the card in your hand to a card in the boss' hand to attack them." << endl;
+    cout << "- If you can't make a match, play any card to be dealt a new one." << endl;
+    cout << "- You only have " << deck_size << " cards to defeat " << num_bosses << " bosses. So play wisely." << endl;
+    cout << "** For an added challenge, set a timer for 2 minutes and beat the dungeon in that time." << endl;
 
     for (int bosses_defeated = 0; bosses_defeated < num_bosses; bosses_defeated++) {
         int boss_hand[5] = {0, 0, 0, 0, 0}; // boss setup
@@ -94,7 +99,7 @@ int main() {
             cout << "BOSSES: " << bosses_defeated << "/" << num_bosses << endl;
 
             if (deck_size - cards_played == 0) {
-                cout << "You're out of cards. You lose." << endl;
+                cout << "You're out of moves. The dungeon has defeated you." << endl;
             }
 
             cout << "BOSS: ";
@@ -104,7 +109,12 @@ int main() {
 
             cards_played += 1;
         }
+
+        cout << "YOU DEFEATED A BOSS! NICE!!" << endl;
+        cout << "TIME FOR THE NEXT BOSS!" << endl;
     }
+
+    cout << "YOU DEFEATED ALL THE BOSSES AND CONQUERED THE DUNGEON!!" << endl;
 
     return 0;
 }
